@@ -2,6 +2,7 @@
 #include <iostream>
 #include <string>
 #include "image.h"
+#include "vector"
 #include "allegro5/allegro_primitives.h"
 using namespace std;
 
@@ -33,6 +34,22 @@ public:
 	{
 		if (isDamage) { varHealth -= damage; }
 		else { varHealth += damage; }
+	}
+	string saveData(tower enemie)
+	{
+		string result;
+		result += to_string(varHealth) + " ";
+		result += to_string(enemie.getHealth());
+		return result;
+	}
+	
+	void setData(vector<int>(*func)(string,string),string data)
+	{
+		vector<int> result = func(data, " ");
+		if(isMine)
+			varHealth = result[0];
+		else
+			varHealth = result[1];
 	}
 	void generateTower()
 	{

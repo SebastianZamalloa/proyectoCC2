@@ -5,7 +5,6 @@
 #include "image.h"
 #include <string>
 using namespace std;
-
 class background
 {
 	protected:
@@ -47,6 +46,21 @@ class background
 			imageBG.setBitmap(nameBG, ".png");
 			moneyVar[0] = 0; moneyVar[1] = 0;
 			moneyLimit = 1000;
+		}
+		string saveData()
+		{
+			string result;
+			result += to_string(moneyVar[0]) + " ";
+			result += to_string(moneyVar[1]) + " ";
+			result += to_string(counter);
+			return result;
+		}
+		void setData(vector<int>(*func)(string, string),string data)
+		{
+			vector<int> result = func(data, " ");
+			moneyVar[0] = result[0];
+			moneyVar[1] = result[1];
+			counter = result[2];
 		}
 		ALLEGRO_BITMAP* getBG() { return imageBG.getBitmap(); }
 		void generateBG()

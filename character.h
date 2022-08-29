@@ -8,7 +8,9 @@
 #include "data.cpp"
 #include <memory>
 #include "sound.h"
-using namespace std;
+
+
+
 class character
 {
 protected:
@@ -51,7 +53,7 @@ protected:
     sound soundAttack[2] = { sound("audio/attack/1.mp3"),sound("audio/attack/2.mp3") };
 
 public:
-    character() = default;
+    character() { reInitialize(0, true); }
     character(int auxID, bool propery) { reInitialize(auxID, propery); }
     int getID() { return ID; }
     int getPosX() { return posX; }
@@ -61,12 +63,14 @@ public:
     {
         ID = auxID;
         isMine = propery;
-        string nameCharacter = to_string(ID);
-        if (!isMine)
-            nameCharacter = "enemy/" + nameCharacter;
-        nameCharacter = "characters/" + nameCharacter;
-        characterSheet.setBitmap(nameCharacter, ".png");
-
+        if (ID > 0)
+        {
+            string nameCharacter = to_string(ID);
+            if (!isMine)
+                nameCharacter = "enemy/" + nameCharacter;
+            nameCharacter = "characters/" + nameCharacter;
+            characterSheet.setBitmap(nameCharacter, ".png");
+        }
         HP = getDB(ID, "HP");
         range = getDB(ID, "range");
         damage = getDB(ID, "damage");
@@ -96,7 +100,31 @@ public:
         addPosY = (rand() % (8)) * 4;
         posY = 650 + addPosY;
     }
+    //ID HP frameTravel frameCounter posXSheet posYSheet posX posY 
     virtual ~character() {}
+    string returnDataActual()
+    {
+        string result;
+        result += to_string(ID) + " ";
+        result += to_string(HP) + " ";
+        result += to_string(frameTravel) + " ";
+        result += to_string(posXSheet) + " ";
+        result += to_string(posYSheet) + " ";
+        result += to_string((int)posX) + " ";
+        result += to_string((int)posY);
+        return result;
+    }
+    void setDataActual(vector<int>(*func)(string, string),string data)
+    {
+        vector<int> result = func(data," ");
+        ID = result[0];
+        HP = result[1];
+        frameTravel = result[2];
+        posXSheet = result[3];
+        posYSheet = result[4];
+        posX = (float)result[5];
+        posY = (float)result[6];
+    }
     int getAddPosY() { return addPosY; }
     void avanzar() { if (isMine) posX += 1 * speedMovement; else { posX -= 1 * speedMovement; } }
     virtual bool detect_tower(tower* enemieTower)
