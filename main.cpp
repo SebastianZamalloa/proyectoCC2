@@ -125,8 +125,8 @@ int main()
 		RemoteControl(new voidCommand("btn_salir",700,680,nothing,2)),
 		RemoteControl(new voidCommand("btn_salir",700,720,nothing,2))
 	};
-	background* fondos = new background[14];
-	for (int i = 0; i < 14; i++)
+	background* fondos = new background[5];
+	for (int i = 0; i < 5; i++)
 		fondos[i].setValores(i+1);
 
 	bool running = true;
@@ -250,9 +250,9 @@ int main()
 				if (event.type == ALLEGRO_EVENT_TIMER)
 				{
 					if (winner)
-						fondos[6].generateBG();
+						fondos[3].generateBG();
 					else
-						fondos[8].generateBG();
+						fondos[4].generateBG();
 					control[6].executeButton(ventana, 1);
 				}
 			}break;
