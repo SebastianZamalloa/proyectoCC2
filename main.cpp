@@ -13,7 +13,11 @@
 #include <ctime>
 #include <vector>
 #include "conexion.cpp"
-
+#include "fachadaCharacters.h"
+void charGenerator(unique_ptr<fachadaCharacters>&fachada, vector<character*>& tempCh, vector<character*>& tempEn, size_t x, size_t y, tower& torreAmiga, tower& torreEnemiga)
+{
+	fachada->sortingNgenerating(tempCh, tempEn, x, y, torreAmiga, torreEnemiga);
+}
 vector<int>DBtoInt(string s, string delimiter)
 {
 	vector<int> prueba;
@@ -249,8 +253,10 @@ int main()
 	bool winner{false};
 	int ventana{1};
 	
+	unique_ptr<fachadaCharacters> sortingChar = make_unique<fachadaCharacters>();
 	restoreData(1, aliados, enemies, x, y, fondos[1], control, torreAmiga, torreEnemiga);
 	restoreData(2, aliados, enemies, x, y, fondos[0], control, torreAmiga, torreEnemiga);
+
 	while (running)
 	{
 		ALLEGRO_KEYBOARD_STATE keyState;
@@ -286,20 +292,9 @@ int main()
 					control[1].executeButton(1, enemies, y, false, fondos[1], false);
 					control[2].executeButton(2, aliados, x, true, fondos[1], false);
 					control[3].executeButton(2, enemies, y, false, fondos[1], false);
-					for (int i = 0; i < x; i++)
-					{
-						vector<character*>aliadostemp = aliados;
-						sort(aliadostemp.begin(), aliadostemp.end(), comparator);
-						if (aliadostemp[i] != NULL)
-							aliadostemp[i]->generateCharacter(enemies, &torreEnemiga);
-					}
-					for (int i = 0; i < y; i++)
-					{
-						vector<character*>enemigostemp = enemies;
-						sort(enemigostemp.begin(), enemigostemp.end(), comparator);
-						if (enemigostemp[i] != NULL)
-							enemigostemp[i]->generateCharacter(aliados, &torreAmiga);
-					}
+
+					charGenerator(sortingChar, aliados, enemies, x, y, torreAmiga, torreEnemiga);
+
 					if (torreAmiga.getCheckLife() <= 0) {
 						ventana = 4;
 						winner = false;
@@ -328,30 +323,20 @@ int main()
 					control[0].executeButton(1, aliados, x, true, fondos[0], false);
 					control[1].executeButton(1, enemies, y, false, fondos[0], true);
 					control[2].executeButton(2, aliados, x, true, fondos[0], false);
-					for (int i = 0; i < x; i++)
-					{
-						vector<character*>aliadostemp = aliados;
-						sort(aliadostemp.begin(), aliadostemp.end(), comparator);
-						if (aliadostemp[i] != NULL)
-							aliadostemp[i]->generateCharacter(enemies, &torreEnemiga);
-					}
-					for (int i = 0; i < y; i++)
-					{
-						vector<character*>enemigostemp = enemies;
-						sort(enemigostemp.begin(), enemigostemp.end(), comparator);
-						if (enemigostemp[i] != NULL)
-							enemigostemp[i]->generateCharacter(aliados, &torreAmiga);
-					}
+
+					charGenerator(sortingChar, aliados, enemies, x, y, torreAmiga, torreEnemiga);
 
 					if (torreAmiga.getCheckLife() <= 0) {
 						ventana = 4;
 						winner = false;
 						resetAll(torreAmiga, torreEnemiga, fondos[0], aliados, enemies, x, y);
+						voidDataBase(1);
 					}
 					if (torreEnemiga.getCheckLife() <= 0) {
 						ventana = 4;
 						winner = false;
 						resetAll(torreAmiga, torreEnemiga, fondos[0], aliados, enemies, x, y);
+						voidDataBase(1);
 					}
 
 				}
@@ -378,10 +363,10 @@ int main()
 	if (ventana == 2)
 		saveAllData(1, aliados, enemies, fondos[1], control, torreAmiga, torreEnemiga);
 	if (ventana == 3)
-		saveAllData(2, aliados, enemies, fondos[0], control, torreAmiga, torreEnemiga);
+		saveAllData(2, aliados, enemies, fondos[0], control, torreAmiga, torreEnemiga); cout << "hola";
 	SingletonData::deleteData();
 	delete[] control;
-	delete[] fondos;
+	delete[] fondos;  
 	al_destroy_display(display);
 	al_uninstall_keyboard();
 	al_destroy_sample(sample);

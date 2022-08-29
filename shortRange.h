@@ -139,8 +139,7 @@ public:
                 }
                 for (int i = 0; i < enemiesID.size(); i++)
                 {
-                    enemies[enemiesID[i]]->modifyHP(damage);
-                    cout << "\nVIDA ENEMIGA: " << enemies[enemiesID[i]]->getHP() << endl;
+                    enemies[enemiesID[i]]->modifyHP(damage);                
                     if (enemies[enemiesID[i]]->getHP() <= 0)
                     {
                         delete enemies[enemiesID[i]];
@@ -148,7 +147,6 @@ public:
                         focusID = -1;
                     }
                 }
-                cout << endl << endl;
             }
         }
     }
