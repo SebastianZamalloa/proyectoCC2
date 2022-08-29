@@ -318,6 +318,7 @@ int main()
 			{
 				control[0].recharBtn(event, keyState);
 				control[2].recharBtn(event, keyState);
+				control[4].recharBtn(event, keyState);
 				if (event.type == ALLEGRO_EVENT_TIMER)
 				{
 					al_clear_to_color(al_map_rgba_f(1, 1, 1, 1));
@@ -327,7 +328,9 @@ int main()
 					control[0].executeButton(1, aliados, x, true, fondos[0], false);
 					control[1].executeButton(1, enemies, y, false, fondos[0], true);
 					control[2].executeButton(2, aliados, x, true, fondos[0], false);
+					control[3].executeButton(2, enemies, y, false, fondos[0], true);
 					control[4].executeButton(3, aliados, x, true, fondos[0], false);
+					control[5].executeButton(3, enemies, y, false, fondos[0], true);
 
 					charGenerator(sortingChar, aliados, enemies, x, y, torreAmiga, torreEnemiga);
 

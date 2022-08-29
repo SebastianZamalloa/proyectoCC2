@@ -46,7 +46,6 @@ void setDataBase(int ID, vector<string> data)
 		string dataTemp = "UPDATE saveData SET allies = '"+data[0]+"', enemies = '"+data[1]+"', background = '"+data[2]+"', buttons = '"+data[3]+"', towers = '"+data[4]+"' WHERE ID = ";
 		auto strInt = to_string(ID);
 		dataTemp += strInt;
-		cout << dataTemp << endl;
 		const char* name = dataTemp.c_str();
 		int qstate = mysql_query(conectar, name);
 	}
