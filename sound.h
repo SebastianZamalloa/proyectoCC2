@@ -10,8 +10,8 @@ class sound
 	public:
 		sound(string soundName)
 		{
-			const char* name = soundName.c_str();
-			sample = al_load_sample(name);
+			unique_ptr <const char*> name = make_unique<const char*>(soundName.c_str());
+			sample = al_load_sample(*name);
 		}
 		~sound(){al_destroy_sample(sample);}
 		void playSound(){al_play_sample(sample, 1.0, 0, 1.0, ALLEGRO_PLAYMODE_ONCE, 0);}

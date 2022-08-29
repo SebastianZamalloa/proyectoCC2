@@ -69,13 +69,13 @@ class background
 			if (gameMode != 0)
 			{
 				string money1 = to_string(moneyVar[0]);
-				const char* moneyChar1 = money1.c_str();
-				al_draw_text(moneyText, al_map_rgb(255, 255, 255), 10, 10, 0, moneyChar1);
+				unique_ptr <const char*> moneyChar1 = make_unique<const char*>(money1.c_str());
+				al_draw_text(moneyText, al_map_rgb(255, 255, 255), 10, 10, 0, *moneyChar1);
 				if (gameMode == 1)
 				{
 					string money2 = to_string(moneyVar[1]);
-					const char* moneyChar2 = money2.c_str();
-					al_draw_text(moneyText, al_map_rgb(255, 255, 255), 1850, 10, 0, moneyChar2);
+					unique_ptr <const char*> moneyChar2 = make_unique<const char*>(money2.c_str());
+					al_draw_text(moneyText, al_map_rgb(255, 255, 255), 1850, 10, 0, *moneyChar2);
 				}
 				counter++;
 				if (counter == 1)

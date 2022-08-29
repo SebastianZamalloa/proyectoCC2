@@ -58,13 +58,13 @@ void assignType(character*& unit, int type, int ID, bool isMine)
 
 void generateCharacter(int ID, vector<character*>& team, size_t& quantity, bool isMine, background& fontMoney)
 {
-	if (fontMoney.getMoney(isMine) < getDB(ID, "price"))
+	if (fontMoney.getMoney(isMine) < SingletonData::getDB(ID, "price"))
 		return;
 	if (quantity < 50)
 	{
-		fontMoney.modifyMoney(getDB(ID, "price"), isMine, true);
+		fontMoney.modifyMoney(SingletonData::getDB(ID, "price"), isMine, true);
 		team.push_back(NULL);
-		assignType(team[quantity], getDB(ID, "type"), ID, isMine);
+		assignType(team[quantity], SingletonData::getDB(ID, "type"), ID, isMine);
 		quantity++;
 
 	}
@@ -74,8 +74,8 @@ void generateCharacter(int ID, vector<character*>& team, size_t& quantity, bool 
 		{
 			if (team[i] == NULL)
 			{
-				fontMoney.modifyMoney(getDB(ID, "price"), isMine, true);
-				assignType(team[i], getDB(ID, "type"), ID, isMine);
+				fontMoney.modifyMoney(SingletonData::getDB(ID, "price"), isMine, true);
+				assignType(team[i], SingletonData::getDB(ID, "type"), ID, isMine);
 				return;
 			}
 		}
@@ -143,7 +143,7 @@ void restoreData(int ID, vector<character*>&aliados, vector<character*>&enemies,
 			aliados.push_back(NULL);
 			int IDChar = (int)charactersData[i][0];
 			IDChar -= 48;
-			assignType(aliados[i], getDB(IDChar, "type"), IDChar, true);
+			assignType(aliados[i], SingletonData::getDB(IDChar, "type"), IDChar, true);
 			aliados[i]->setDataActual(DBtoInt, charactersData[i]);
 		}
 	}
@@ -158,7 +158,7 @@ void restoreData(int ID, vector<character*>&aliados, vector<character*>&enemies,
 			enemies.push_back(NULL);
 			int IDChar = (int)enemiesData[i][0];
 			IDChar -= 48;
-			assignType(enemies[i], getDB(IDChar, "type"), IDChar, false);
+			assignType(enemies[i], SingletonData::getDB(IDChar, "type"), IDChar, false);
 			enemies[i]->setDataActual(DBtoInt, enemiesData[i]);
 		}
 	}
@@ -222,7 +222,7 @@ int main()
 	al_init_image_addon();
 	vector<character*>aliados;
 	vector<character*>enemies;
-	dataIntialize();
+	SingletonData::getInstance();
 	tower torreAmiga(100, true, 1);
 	tower torreEnemiga(100, false, 1);
 	RemoteControl* control = new RemoteControl[8]
@@ -379,7 +379,7 @@ int main()
 		saveAllData(1, aliados, enemies, fondos[1], control, torreAmiga, torreEnemiga);
 	if (ventana == 3)
 		saveAllData(2, aliados, enemies, fondos[0], control, torreAmiga, torreEnemiga);
-	deleteData();
+	SingletonData::deleteData();
 	delete[] control;
 	delete[] fondos;
 	al_destroy_display(display);

@@ -235,14 +235,14 @@ public:
 			if (modeFramesCounts + 1 == randomFrameMode)
 			{
 				modeFramesCounts = 0;
-				int n = getDB(ID, "price");
+				int n = SingletonData::getDB(ID, "price");
 				fontMoney.modifyMoney(n, false, false);
 				buttonGenerate(ID, team, quantity, isMine, fontMoney);
 			}
 		}
 		else
 		{
-			if (fontMoney.getMoney(isMine) < getDB(ID, "price") || frameCounter != 0)
+			if (fontMoney.getMoney(isMine) < SingletonData::getDB(ID, "price") || frameCounter != 0)
 			{
 				activate = false;
 			}else{ activate = true;}

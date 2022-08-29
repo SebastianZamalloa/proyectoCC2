@@ -71,27 +71,27 @@ public:
             nameCharacter = "characters/" + nameCharacter;
             characterSheet.setBitmap(nameCharacter, ".png");
         }
-        HP = getDB(ID, "HP");
-        range = getDB(ID, "range");
-        damage = getDB(ID, "damage");
+        HP = SingletonData::getDB(ID, "HP");
+        range = SingletonData::getDB(ID, "range");
+        damage = SingletonData::getDB(ID, "damage");
 
-        attackSpeed = getDB(ID, "attackSpeed", true);
-        speedMovement = getDB(ID, "speedMovement", true);
+        attackSpeed = SingletonData::getDB(ID, "attackSpeed", true);
+        speedMovement = SingletonData::getDB(ID, "speedMovement", true);
 
-        areaDamage = getDB(ID);
-        price = getDB(ID, "price");
+        areaDamage = SingletonData::getDB(ID);
+        price = SingletonData::getDB(ID, "price");
 
-        sizeXSheet = getDB(ID, "sizeXSheet");
-        sizeYSheet = getDB(ID, "sizeYSheet");
-        frameCountWalk = getDB(ID, "frameCountWalk");
-        frameDurationWalk = getDB(ID, 0);
-        frameCountAttack = getDB(ID, "frameCountAttack");
-        frameDurationAttack = getDB(ID, 1);
-        hitboXOrigin = getDB(ID, "hitboXOrigin");
-        hitboXEnd = getDB(ID, "hitboXEnd");
+        sizeXSheet = SingletonData::getDB(ID, "sizeXSheet");
+        sizeYSheet = SingletonData::getDB(ID, "sizeYSheet");
+        frameCountWalk = SingletonData::getDB(ID, "frameCountWalk");
+        frameDurationWalk = SingletonData::getDB(ID, 0);
+        frameCountAttack = SingletonData::getDB(ID, "frameCountAttack");
+        frameDurationAttack = SingletonData::getDB(ID, 1);
+        hitboXOrigin = SingletonData::getDB(ID, "hitboXOrigin");
+        hitboXEnd = SingletonData::getDB(ID, "hitboXEnd");
         frameTravel = 0;
         frameCounter = 1;
-        frameAttack = getDB(ID, "frameAttack");
+        frameAttack = SingletonData::getDB(ID, "frameAttack");
 
         posXSheet = 0;
         posYSheet = 0;

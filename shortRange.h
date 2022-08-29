@@ -11,8 +11,8 @@ private:
 public:
     shortRange(int auxID, bool propery) :character(auxID, propery)
     {
-        splashNumber = getDB(ID, "extraData1");
-        objetiveRange = getDB(ID, "extraData2");
+        splashNumber = SingletonData::getDB(ID, "extraData1");
+        objetiveRange = SingletonData::getDB(ID, "extraData2");
     }
     ~shortRange() {}
     vector<int> getEnemies(vector<character*> enemies)
