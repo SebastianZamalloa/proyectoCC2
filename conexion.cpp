@@ -10,7 +10,7 @@ vector<string> getDataBase(int ID)
 {
 	MYSQL* conectar;
 	conectar = mysql_init(0);
-	conectar = mysql_real_connect(conectar, "localhost", "root", "Gregllama_12", "juegocc", 3306, NULL, 0);
+	conectar = mysql_real_connect(conectar, "localhost", "root", "password", "juegocc", 3306, NULL, 0);
 	MYSQL_ROW row;
 	MYSQL_RES* res;
 	vector<string> datos;
