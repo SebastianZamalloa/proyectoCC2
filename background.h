@@ -15,6 +15,7 @@ class background
 		int moneyVar[2];
 		int moneyLimit;
 		int counter;
+		int gameMode;
 	public:
 		background()
 		{
@@ -23,8 +24,9 @@ class background
 			moneyVar[0] = 100; moneyVar[1] = 100;
 			moneyLimit = 1000;
 			counter = 0;
+			gameMode = 0;
 		}
-		background(int numTemp) :numBG(numTemp)
+		background(int numTemp, int gM) :numBG(numTemp), gameMode(gM)
 		{
 			moneyText = al_load_ttf_font("wantCoffee.ttf", 32, 0);
 			string nameBG = to_string(numTemp);
@@ -35,9 +37,10 @@ class background
 			counter = 0;
 		}
 		~background() { al_destroy_font(moneyText); }
-		void setValores(int numTemp) 
+		void setValores(int numTemp, int gM) 
 		{
 			numBG = numTemp;
+			gameMode = gM;
 			moneyText = al_load_ttf_font("wantCoffee.ttf", 32, 0);
 			string nameBG = to_string(numTemp);
 			nameBG = "background/" + nameBG;
@@ -49,19 +52,25 @@ class background
 		void generateBG()
 		{
 			imageBG.generateImage(0, 0);
-			string money1 = to_string(moneyVar[0]);
-			string money2 = to_string(moneyVar[1]);
-			const char* moneyChar1 = money1.c_str();
-			const char* moneyChar2 = money2.c_str();
-			al_draw_text(moneyText, al_map_rgb(255, 255, 255), 10, 10, 0, moneyChar1);
-			al_draw_text(moneyText, al_map_rgb(255, 255, 255), 1850, 10, 0, moneyChar2);
-			counter++;
-			if (counter == 1)
+			if (gameMode != 0)
 			{
-				if (moneyVar[0] < moneyLimit) moneyVar[0] += 1;
-				if (moneyVar[1] < moneyLimit) moneyVar[1] += 1;
-				counter = 0;
-			}
+				string money1 = to_string(moneyVar[0]);
+				const char* moneyChar1 = money1.c_str();
+				al_draw_text(moneyText, al_map_rgb(255, 255, 255), 10, 10, 0, moneyChar1);
+				if (gameMode == 1)
+				{
+					string money2 = to_string(moneyVar[1]);
+					const char* moneyChar2 = money2.c_str();
+					al_draw_text(moneyText, al_map_rgb(255, 255, 255), 1850, 10, 0, moneyChar2);
+				}
+				counter++;
+				if (counter == 1)
+				{
+					if (moneyVar[0] < moneyLimit) moneyVar[0] += 1;
+					if (moneyVar[1] < moneyLimit) moneyVar[1] += 1;
+					counter = 0;
+				}
+			}	
 		}
 		void modifyMoney(int cost, bool isMine, bool isCost)
 		{

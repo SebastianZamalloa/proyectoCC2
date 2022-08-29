@@ -119,7 +119,7 @@ int main()
 	{
 		RemoteControl(new generateCommand("btn_1", 150, 100, generateCharacter, 120)),
 		RemoteControl(new generateCommand("btn_1", 1650, 100, generateCharacter, 120)),
-		RemoteControl(new generateCommand("btn_1", 300, 100, generateCharacter, 240)),
+		RemoteControl(new generateCommand("btn_2", 300, 100, generateCharacter, 240)),
 		RemoteControl(new voidCommand("btn_multijugador", 700, 360, nothing, 2)),
 		RemoteControl(new voidCommand("btn_solitario",700,535,nothing,2)),
 		RemoteControl(new voidCommand("btn_salir",700,680,nothing,2)),
@@ -127,16 +127,12 @@ int main()
 	};
 	background* fondos = new background[5];
 	for (int i = 0; i < 5; i++)
-		fondos[i].setValores(i+1);
-
+		i > 1 ? fondos[i].setValores(i + 1, 0) : fondos[i].setValores(i + 1, 2 - i);
+		
 	bool running = true;
-	int mousex = 0;
-	int mousey = 0;
-
 	al_start_timer(timer);
-
 	bool winner{false};
-	int ventana = 1;
+	int ventana{1};
 
 	while (running)
 	{
