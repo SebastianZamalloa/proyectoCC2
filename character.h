@@ -13,22 +13,22 @@
 
 class character
 {
-protected:
-    int ID;
+protected: //Todos los atributos de character se encuentran aqui
+    int ID;//--------------------------------
     int HP;
     int range;
     int damage;
     float attackSpeed;
     float speedMovement;
     bool areaDamage;
-    int price;
+    int price; //Hasta aqui son caracteristicas
 
-    float posX;
+    float posX; //--------------------------------
     float posY;
-    int addPosY;
-    bool isMine;
+    int addPosY; //Hasta aqui son posiciones
+    bool isMine; //Determina si el personaje es tuyo o del enemigo
 
-    int sizeXSheet;
+    int sizeXSheet;//--------------------------------
     int sizeYSheet;
     int posXSheet;
     int posYSheet;
@@ -39,18 +39,18 @@ protected:
     int frameCountWalk;
     int frameCountAttack;
     int* frameDurationWalk;
-    int* frameDurationAttack;
-    int frameAttack;
-    int focusID = -1;
+    int* frameDurationAttack; 
+    int frameAttack; //Todas las variables que están aquí son parámetros que usa la funcion de animar al personaje para hacer la ilusión de movimiento
+    int focusID = -1; //ID del enemigo al que está apuntando el personaje
 
-    bool animationState[3]{ false,false,false };
-    void verifyUniqueAnimation(int);
+    bool animationState[3]{ false,false,false }; //Variables de animacion
+    void verifyUniqueAnimation(int); //--------------------------------
 
-    int frameTravel;
-    int frameCounter;
+    int frameTravel; //--------------------------------
+    int frameCounter; //Variables de animacion
 
-    image characterSheet;
-    sound soundAttack[2] = { sound("audio/attack/1.mp3"),sound("audio/attack/2.mp3") };
+    image characterSheet; //SpriteSheet o imagen de imagenes del personaje
+    sound soundAttack[2] = { sound("audio/attack/1.mp3"),sound("audio/attack/2.mp3") }; //Sonidos de ataque de los personajes
 
 public:
     character() { reInitialize(0, true); }
@@ -59,7 +59,8 @@ public:
     int getPosX() { return posX; }
     int getHP() { return HP; }
     int getHitboxEnd() { return hitboXEnd; }
-    void reInitialize(int auxID, bool propery)
+    int getAddPosY() { return addPosY; }
+    void reInitialize(int auxID, bool propery) //Función general que sirve como constructor del personaje, con la ID es más que suficiente para rellenar todos los atributos
     {
         ID = auxID;
         isMine = propery;
@@ -71,7 +72,7 @@ public:
             nameCharacter = "characters/" + nameCharacter;
             characterSheet.setBitmap(nameCharacter, ".png");
         }
-        HP = SingletonData::getDB(ID, "HP");
+        HP = SingletonData::getDB(ID, "HP"); //Se usa la instancia de SingletonData para llamar a getDB y que extraiga todos los datos que necesitamos
         range = SingletonData::getDB(ID, "range");
         damage = SingletonData::getDB(ID, "damage");
 
@@ -100,9 +101,9 @@ public:
         addPosY = (rand() % (8)) * 4;
         posY = 650 + addPosY;
     }
-    //ID HP frameTravel frameCounter posXSheet posYSheet posX posY 
     virtual ~character() {}
-    string returnDataActual()
+    //Datos principales a guardar: ID HP frameTravel frameCounter posXSheet posYSheet posX posY 
+    string returnDataActual() //estas funciones sirven para guardar el estado en el que estan los personajes al cerrar
     {
         string result;
         result += to_string(ID) + " ";
@@ -114,7 +115,7 @@ public:
         result += to_string((int)posY);
         return result;
     }
-    void setDataActual(vector<int>(*func)(string, string),string data)
+    void setDataActual(vector<int>(*func)(string, string),string data) //seteamos todos los datos sacados de la base de datos (Funciones de main)
     {
         vector<int> result = func(data," ");
         ID = result[0];
@@ -125,8 +126,7 @@ public:
         posX = (float)result[5];
         posY = (float)result[6];
     }
-    int getAddPosY() { return addPosY; }
-    void avanzar() { if (isMine) posX += 1 * speedMovement; else { posX -= 1 * speedMovement; } }
+    void avanzar() { if (isMine) posX += 1 * speedMovement; else { posX -= 1 * speedMovement; } } //movimiento en x basado en speedMovement
     virtual bool detect_tower(tower* enemieTower)
     {
         if (isMine)
@@ -140,7 +140,9 @@ public:
                 return true;
         }
         return false;
-    }
+    }/*Mediante espacios en coordenadas detecta si hay algun enemigo o una torre en frente suyo, para esto pasamos como
+     parametro la torre o el vector de punteros a enemigos y analizamos por su ubicación si es posible atacar */
+
     virtual bool detect_enemie(vector<character*> enemies)
     {
         if (isMine)
@@ -150,7 +152,7 @@ public:
                 if (enemies[i] != NULL)
                     if (posX + hitboXEnd + range <= enemies[i]->getPosX() + 100 && posX + hitboXEnd + range >= enemies[i]->getPosX())
                     {
-                        focusID = i;
+                        focusID = i; //En el caso del enemigo también guarda su ID en el vector de enemigos para poder atacarlo
                         return true;
                     }
             }
@@ -162,7 +164,7 @@ public:
                 if (enemies[i] != NULL)
                     if (posX + hitboXOrigin - range >= enemies[i]->getPosX() + enemies[i]->getHitboxEnd() - 100 && posX + hitboXOrigin - range <= enemies[i]->getPosX() + enemies[i]->getHitboxEnd())
                     {
-                        focusID = i;
+                        focusID = i; //En el caso del enemigo también guarda su ID en el vector de enemigos para poder atacarlo
                         return true;
                     }
             }
@@ -171,20 +173,20 @@ public:
     }
     virtual void atacar(vector<character*>& enemies, tower* enemieTower, bool isTower)
     {
-        if (frameTravel == frameAttack - 1 && frameCounter == 1)
+        if (frameTravel == frameAttack - 1 && frameCounter == 1) //Verifica si los frames de animación ya estan en el frame indicado para atacar 
         {
-            soundAttack[rand() % (2)].playSound();
+            soundAttack[rand() % (2)].playSound(); //Lanza un sonido aleatorio
             if (isTower)
             {
-                enemieTower->modifyHealth(damage, true);
+                enemieTower->modifyHealth(damage, true); //Ataque a torre
                 if (enemieTower->getHealth() <= 0)
                 {
-                    cout << "GANASTE" << endl;
+                    cout << "GANASTE" << endl; 
                 }
             }
             else
             {
-                enemies[focusID]->modifyHP(damage);
+                enemies[focusID]->modifyHP(damage); //Ataque a enemigo
                 if (enemies[focusID]->getHP() <= 0)
                 {
                     delete enemies[focusID];
@@ -194,32 +196,32 @@ public:
             }
         }
     }
-    virtual void generateCharacter(vector<character*>& enemies, tower* enemieTower)
+    virtual void generateCharacter(vector<character*>& enemies, tower* enemieTower) //Funcion que genera al personaje en pantalla, lo anima y hace que ataque y detecte
     {
-        bool haveTower = detect_tower(enemieTower);
+        bool haveTower = detect_tower(enemieTower); //Detecta con prioridad si hay una torre
         bool haveEnemy = false;
         if (haveTower)
         {
             animateCharacter(3);
-            atacar(enemies, enemieTower, true);
+            atacar(enemies, enemieTower, true); //Animación y ataque
         }
         else if (!haveTower)
         {
             if (focusID >= 0)
                 if (enemies[focusID] == NULL)
-                    focusID = -1;
+                    focusID = -1; //Reinicio del FocusID en caso de que ya no haya ningun enemigo
             haveEnemy = detect_enemie(enemies);
             if (haveEnemy)
             {
-                animateCharacter(3);
+                animateCharacter(3); //Animacion y ataque
                 atacar(enemies, enemieTower, false);
             }
             else if (animationState[2])
             {
-                animateCharacter(3);
+                animateCharacter(3); //Hay prioridad de terminar la animación de ataque a pesar de que ya no hayan enemigos al frente
             }
             else
-                animateCharacter(2);
+                animateCharacter(2); //Si no se cumple ninguna detección solo avanza
         }
     }
     void modifyHP(int x) { HP -= x; }
@@ -229,7 +231,7 @@ public:
         int postempY = posY - sizeYSheet;
         posYSheet = (state - 1) * sizeYSheet;
         animationState[state - 1] = true;
-        verifyUniqueAnimation(state);
+        verifyUniqueAnimation(state); //Solo puede haber un estado de a
 
         switch (state)
         {
@@ -240,14 +242,14 @@ public:
         }break;
         case 2:
         {
-            if (frameTravel < frameCountWalk)
+            if (frameTravel < frameCountWalk) //Se tiene la necesidad de viajar por la cantidad de frames que indique frameCountWalk
             {
-                characterSheet.generateImage(posXSheet, posYSheet, sizeXSheet, sizeYSheet, posX, postempY);
-                if (frameCounter == frameDurationWalk[frameTravel])
+                characterSheet.generateImage(posXSheet, posYSheet, sizeXSheet, sizeYSheet, posX, postempY); //Generación general
+                if (frameCounter == frameDurationWalk[frameTravel])//cantidad de frames que tiene cada imagen que pasar
                 {
                     frameCounter = 1;
-                    frameTravel++;
-                    posXSheet += sizeXSheet;
+                    frameTravel++;//Recorrido de los frames generales
+                    posXSheet += sizeXSheet; //Recorrido del spriteSheet
                 }
                 else
                     frameCounter++;
@@ -256,13 +258,13 @@ public:
             {
                 posXSheet = 0;
                 frameTravel = 0;
-                frameCounter = 1;
+                frameCounter = 1;//Reinicio
             }
             avanzar();
         }break;
         case 3:
         {
-            if (frameTravel < frameCountAttack)
+            if (frameTravel < frameCountAttack) //Sigue el mismo funcionamiento general del anterior caso
             {
                 characterSheet.generateImage(posXSheet, posYSheet, sizeXSheet, sizeYSheet, posX, postempY);
                 if (frameCounter == frameDurationAttack[frameTravel])
@@ -279,12 +281,12 @@ public:
                 posXSheet = 0;
                 frameTravel = 0;
                 frameCounter = 1;
-                animationState[2] = false;
+                animationState[2] = false; //Aseguramiento de que se cambie de estado de animacion al de caminar en caso no se cumplan los requerimientos
             }
         }break;
         }
     }
-    bool operator()(character* x, character* y)
+    bool operator()(character* x, character* y) //Functor de comparación de AddPosY, esto para ordenarlos sin que se superpongan
     {
         if (x != nullptr && y != nullptr)
             return (x->getAddPosY() < y->getAddPosY());
@@ -295,7 +297,7 @@ public:
     }
 }comparator;
 
-void character::verifyUniqueAnimation(int state)
+void character::verifyUniqueAnimation(int state) //Verificar que solo hay una animación activa
 {
     int count = 0;
     for (int i = 0; i < 3; i++)

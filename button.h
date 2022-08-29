@@ -7,8 +7,8 @@
 using namespace std;
 
 constexpr unsigned int str2int(const char* str, int h = 0)
-{return !str[h] ? 5381 : (str2int(str, h + 1) * 33) ^ str[h];}
-string upperCase(string word)
+{return !str[h] ? 5381 : (str2int(str, h + 1) * 33) ^ str[h];} //Programacion en tiempo de compilacion para usar un string en un switch
+string upperCase(string word) //Aseguramiento de que el caracter de tecla será correcto
 {
 	string result;
 	if (word.size() == 1)
@@ -36,7 +36,7 @@ class button
 protected:
 	int x, y;
 	int buttonWidth, buttonHeight;
-	void (*ButtonChangeInt)(int&,int);
+	void (*ButtonChangeInt)(int&,int); //Punteros a funciones de los posibles botones
 	void (*buttonGenerate)(int, vector<character*>&, size_t&, bool, background&);
 	image buttonIdle;
 	image buttonPress;
@@ -97,19 +97,19 @@ public:
 	{
 		POINT mouse;
 		GetCursorPos(&mouse);
-		if (activate)
+		if (activate)  //Activate es que el boton puede usarse
 		{
 			if (mouse.x > x && mouse.x < x + buttonWidth && mouse.y>y && mouse.y < y + buttonHeight)
 			{
-				gonnaPress = true;
+				gonnaPress = true; //Activacion por clickeo en el contenido de la imagen del boton
 				if (event.type == ALLEGRO_EVENT_MOUSE_BUTTON_DOWN)
 					if (event.mouse.button & 1)
-						canTouch = true; return;
+						canTouch = true; return; //canTouch significa que el mouse ya activó el boton
 			}
 			else
 				gonnaPress = false;
 			const char* name = keyControl.c_str();
-			switch (str2int(name))
+			switch (str2int(name)) //Activacion por teclas
 			{
 				case str2int("A"):
 				{
@@ -170,12 +170,12 @@ public:
 		}
 		else
 		{
-			gonnaPress = false;
+			gonnaPress = false; //gonnaPress es verdadero si el mouse está encima de él
 		}
 
 	}
 	void setMode(bool mod) { mode = mod; }
-	string getData()
+	string getData()//Guardado de partida 
 	{
 		string result;
 		result += to_string(canTouch) + " ";
@@ -184,7 +184,7 @@ public:
 		result += to_string(frameCounter);
 		return result;
 	}
-	void setData(vector<int>(*func)(string, string),string data)
+	void setData(vector<int>(*func)(string, string),string data) //Cargar partida
 	{
 		vector<int> result = func(data, " ");
 		canTouch = result[0];
@@ -192,14 +192,15 @@ public:
 		activate = result[2];
 		frameCounter = result[3];
 	}
+	
 	void generateBtn(int& ventana, int cambio)
 	{
-		if (activate)
+		if (activate) 
 		{
 			if (gonnaPress)
-				buttonPress.generateImage(x, y);
+				buttonPress.generateImage(x, y); //cambia la imagen cuando vas a apretarla
 			else
-				buttonIdle.generateImage(x, y);
+				buttonIdle.generateImage(x, y); //modo normal
 			if (frameCounter == 0)
 			{
 				if (canTouch)
@@ -213,7 +214,7 @@ public:
 		}
 		else
 			buttonIdle.generateImage(x, y);
-		if (frameCounter > 0)
+		if (frameCounter > 0) //contador del tiempo que necesita el boton para recuperarse
 		{
 			canTouch = false;
 			frameCounter++;
@@ -226,7 +227,7 @@ public:
 	}
 	void generateBtn(int ID, vector<character*>& team, size_t& quantity, bool isMine, background& fontMoney)
 	{
-		if (mode)
+		if (mode) //genera personajes sin necesidad de control, de forma aleatoria
 		{
 			if (modeFramesCounts == 0) {
 				randomFrameMode = (4 + rand() % 3) * 60;
@@ -240,7 +241,7 @@ public:
 				buttonGenerate(ID, team, quantity, isMine, fontMoney);
 			}
 		}
-		else
+		else //modo normal de funcionamiento de boton
 		{
 			if (fontMoney.getMoney(isMine) < SingletonData::getDB(ID, "price") || frameCounter != 0)
 			{
@@ -279,7 +280,7 @@ public:
 	}
 };
 
-class commandI
+class commandI //patron de diseño command
 {
 public:
 	virtual void setValues(string, int, int, void (*btnp)(int, vector<character*>&, size_t&, bool, background&), int,string) = 0;
