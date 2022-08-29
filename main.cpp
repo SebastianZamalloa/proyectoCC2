@@ -110,7 +110,7 @@ void saveAllData(int gameMode, vector<character*>aliados, vector<character*>enem
 	}
 	allData.push_back(fondo.saveData());
 	allData.push_back("");
-	for (int i{ 0 }; i < 4; i++)
+	for (int i{ 0 }; i < 6; i++)
 	{
 		allData[3] += controles[i].saveData();
 		if (i != 3)
@@ -168,7 +168,7 @@ void restoreData(int ID, vector<character*>&aliados, vector<character*>&enemies,
 	}
 	cout << "hola"<< endl;
 	fondo.setData(DBtoInt, DB[2]);
-	for (int i{ 0 }; i < 4; i++)
+	for (int i{ 0 }; i < 6; i++)
 		controles[i].setData(DBtoInt, DB[3]);
 	torreAmiga.setData(DBtoInt, DB[4]);
 	torreEnemiga.setData(DBtoInt, DB[4]);
@@ -229,12 +229,14 @@ int main()
 	SingletonData::getInstance();
 	tower torreAmiga(100, true, 1);
 	tower torreEnemiga(100, false, 1);
-	RemoteControl* control = new RemoteControl[8]
+	RemoteControl* control = new RemoteControl[10]
 	{
-		RemoteControl(new generateCommand("btn_1", 150, 100, generateCharacter, 120,"a")),
+		RemoteControl(new generateCommand("btn_1", 150, 100, generateCharacter, 120,"A")),
 		RemoteControl(new generateCommand("btn_1", 1650, 100, generateCharacter, 120,"L")),
 		RemoteControl(new generateCommand("btn_2", 300, 100, generateCharacter, 240,"S")),
 		RemoteControl(new generateCommand("btn_2", 1500, 100, generateCharacter, 240,"K")),
+		RemoteControl(new generateCommand("btn_3", 450, 100, generateCharacter, 600,"D")),
+		RemoteControl(new generateCommand("btn_3", 1350, 100, generateCharacter, 600,"J")),
 		RemoteControl(new voidCommand("btn_multijugador", 700, 360, nothing, 2, "1")),
 		RemoteControl(new voidCommand("btn_solitario",700,535,nothing,2, "2")),
 		RemoteControl(new voidCommand("btn_salir",700,680,nothing,2, "ESCAPE")),
@@ -270,17 +272,17 @@ int main()
 		{
 			case 1:
 			{
-				for (int i{ 4 }; i < 7; i++)
+				for (int i{ 6 }; i < 9; i++)
 					control[i].recharBtn(event, keyState);
 				al_clear_to_color(al_map_rgba_f(1, 1, 1, 1));
 				fondos[2].generateBG();
-				control[4].executeButton(ventana,2);		
-				control[5].executeButton(ventana, 3);
-				control[6].executeButton(ventana, 6);
+				control[6].executeButton(ventana,2);		
+				control[7].executeButton(ventana, 3);
+				control[8].executeButton(ventana, 6);
 			}break;
 			case 2:
 			{
-				for (int i{ 0 }; i < 4; i++)
+				for (int i{ 0 }; i < 6; i++)
 					control[i].recharBtn(event, keyState);				
 				if (event.type == ALLEGRO_EVENT_TIMER)
 				{
@@ -292,6 +294,8 @@ int main()
 					control[1].executeButton(1, enemies, y, false, fondos[1], false);
 					control[2].executeButton(2, aliados, x, true, fondos[1], false);
 					control[3].executeButton(2, enemies, y, false, fondos[1], false);
+					control[4].executeButton(3, aliados, x, true, fondos[1], false);
+					control[5].executeButton(3, enemies, y, false, fondos[1], false);
 
 					charGenerator(sortingChar, aliados, enemies, x, y, torreAmiga, torreEnemiga);
 
@@ -323,6 +327,7 @@ int main()
 					control[0].executeButton(1, aliados, x, true, fondos[0], false);
 					control[1].executeButton(1, enemies, y, false, fondos[0], true);
 					control[2].executeButton(2, aliados, x, true, fondos[0], false);
+					control[4].executeButton(3, aliados, x, true, fondos[0], false);
 
 					charGenerator(sortingChar, aliados, enemies, x, y, torreAmiga, torreEnemiga);
 
@@ -343,14 +348,14 @@ int main()
 			}break;
 			case 4:
 			{
-				control[7].recharBtn(event, keyState);
+				control[9].recharBtn(event, keyState);
 				if (event.type == ALLEGRO_EVENT_TIMER)
 				{
 					if (winner)
 						fondos[3].generateBG();
 					else
 						fondos[4].generateBG();
-					control[7].executeButton(ventana, 1);
+					control[9].executeButton(ventana, 1);
 				}
 			}break;
 			case 6:

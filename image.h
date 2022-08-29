@@ -22,8 +22,8 @@ public:
 	void setBitmap(string nameTemp, string type)
 	{
 		archiveName = nameTemp + type;
-		const char* name = archiveName.c_str();
-		bitmap = al_load_bitmap(name);
+		unique_ptr <const char*> name = make_unique<const char*>(archiveName.c_str());
+		bitmap = al_load_bitmap(*name);
 		widthCh = al_get_bitmap_width(bitmap);
 		heightCh = al_get_bitmap_height(bitmap);
 	}
