@@ -23,7 +23,7 @@ public:
             for (int i = 0; i < enemies.size(); i++)
             {
                 if (enemies[i] != NULL)
-                    if (posX + hitboXEnd + range <= enemies[i]->getPosX() + 100 + objetiveRange && posX + hitboXEnd + range >= posX + 50)
+                    if (posX + hitboXEnd + range <= enemies[i]->getPosX() + 100 + objetiveRange && posX + hitboXEnd + range >= enemies[i]->getPosX() )
                     {
                         if (enemiesID.size() == splashNumber)
                             return enemiesID;
@@ -37,7 +37,7 @@ public:
             for (int i = 0; i < enemies.size(); i++)
             {
                 if (enemies[i] != NULL)
-                    if (posX + hitboXOrigin - range >= enemies[i]->getPosX() + enemies[i]->getHitboxEnd() - 100 - objetiveRange && posX + hitboXOrigin - range <= posX - 50)
+                    if (posX + hitboXOrigin - range >= enemies[i]->getPosX() + enemies[i]->getHitboxEnd() - 100 - objetiveRange && posX + hitboXOrigin - range <= enemies[i]->getPosX() + enemies[i]->getHitboxEnd())
                     {
                         if (enemiesID.size() == splashNumber)
                             return enemiesID;
@@ -148,6 +148,7 @@ public:
                         focusID = -1;
                     }
                 }
+                cout << endl << endl;
             }
         }
     }

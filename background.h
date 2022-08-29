@@ -16,6 +16,14 @@ class background
 		int moneyLimit;
 		int counter;
 	public:
+		background()
+		{
+			numBG = 0;
+			moneyText = nullptr;
+			moneyVar[0] = 100; moneyVar[1] = 100;
+			moneyLimit = 1000;
+			counter = 0;
+		}
 		background(int numTemp) :numBG(numTemp)
 		{
 			moneyText = al_load_ttf_font("wantCoffee.ttf", 32, 0);
@@ -27,6 +35,16 @@ class background
 			counter = 0;
 		}
 		~background() { al_destroy_font(moneyText); }
+		void setValores(int numTemp) 
+		{
+			numBG = numTemp;
+			moneyText = al_load_ttf_font("wantCoffee.ttf", 32, 0);
+			string nameBG = to_string(numTemp);
+			nameBG = "background/" + nameBG;
+			imageBG.setBitmap(nameBG, ".png");
+			moneyVar[0] = 0; moneyVar[1] = 0;
+			moneyLimit = 1000;
+		}
 		ALLEGRO_BITMAP* getBG() { return imageBG.getBitmap(); }
 		void generateBG()
 		{

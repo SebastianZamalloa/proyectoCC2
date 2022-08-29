@@ -32,7 +32,7 @@ struct dataBase
 void dataIntialize()
 {
     characterArray[0] = { 0,0, 0,0,0,0,0,false,0,0,0,0,0,0,0,NULL,NULL,0,0,0},
-    characterArray[1] = { 1,1, 100,100,20,1.5,2,false,100,256,256,5,235,4,5,new int[4]{8,8,8,8},new int[5]{2,20,2,2,100},3,1,0 };
+    characterArray[1] = { 1,1, 100,100,20,1.5,20,false,100,256,256,5,235,4,5,new int[4]{8,8,8,8},new int[5]{2,20,2,2,100},3,1,0 };
     characterArray[2] = { 2,1, 60,100,40,1.5,2,true,180,256,256,5,235,4,5,new int[4]{8,8,8,8},new int[5]{1,10,1,1,100},3,3,100 };
 }
 int getDB(int ID, string name)
